@@ -18,11 +18,33 @@ object ProcessFunctionTest {
 
     val inputStream = env.socketTextStream("localhost", 7777)
 
-    val dataStream = inputStream
-      .map(data => {
-        val arr = data.split(",")
-        SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
-      })
+    /* {
+         a : "",
+         b : [
+          {
+             k:"",
+             v: ""
+          },
+          {
+             k:"",
+             v: ""
+          },
+         ],
+         c: ""
+       }
+
+       */
+    val dataStream = inputStream.flatMap(data => {
+      val item = JSON.parse(data)
+
+      // 获取b对象数组
+      val b: List = item.getB
+
+      val option: Option = b.find(x => "10".equals(x.getK))
+
+      .
+      ..业务逻辑
+    })
 
     // 1.温度连续上升报警
     val warningStream = dataStream
